@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.ServiceModel.Configuration;
+using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Extensions.DependencyInjection;
 using VkNet;
@@ -15,6 +18,7 @@ namespace DeskAnimeChecker
     public partial class Form1 : Form
     {
         private VkApi _client;
+        private List<ulong> AppsId = new List<ulong>{6978390, 5099068, 2427019, 5492280, 6908748};
         public Form1()
         {
             InitializeComponent();
@@ -30,27 +34,10 @@ namespace DeskAnimeChecker
 
         private void button_GetApps_Click(object sender, EventArgs e)
         {
-            if (!_client.IsAuthorized) return;
-            try
-            {
-                var apps = _client.Apps.Get(new AppGetParams
-                {
-                    AppIds = new ulong[] {6978390, 5099068, 2427019, 5492280, 6908748},
-                    ReturnFriends = true
-                });
-                foreach (var app in apps.Apps)
-                {
-                    listBox_Apps.Items.Add($"App: {app.Title}");
-                    listBox_Apps.Items.Add($"Author App: {app.AuthorId}");
-                    foreach (var friend in app.Friends)
-                    {
-                        User frUser = _client.Users.Get(new long[1] {friend}, ProfileFields.FirstName | ProfileFields.LastName).First();
-                        listBox_Apps.Items.Add($"Friend: {frUser.FirstName} {frUser.LastName}");
-                    }
-                }
-                //listBox_Apps.Items.Add($"App: {apps.Apps.First().Title}");
-                //_client.Apps.GetCatalog()
-            } catch (Exception exception) {Console.WriteLine(exception.Message);}
+            Thread gettingApps = new Thread(LoadAppsInTextBox);
+            gettingApps.IsBackground = true;
+            gettingApps.Name = "Getting apps";
+            gettingApps.Start();
         }
 
         private void button_Auth_Click(object sender, EventArgs e)
@@ -104,6 +91,75 @@ namespace DeskAnimeChecker
                     }
                 }
             } catch (Exception exception) {Console.WriteLine(exception.Message);}
+        }
+        
+        private void LoadAppsInTextBox()
+        {
+            if (!_client.IsAuthorized) return;
+            try
+            {
+                var apps = _client.Apps.Get(new AppGetParams
+                {
+                    AppIds = AppsId,
+                    ReturnFriends = true
+                });
+                listBox_Apps.Text = "";
+                foreach (var app in apps.Apps)
+                {
+                    listBox_Apps.Items.Add($"App: {app.Title}");
+                    listBox_Apps.Items.Add($"Author App: {app.AuthorId}");
+                    foreach (var friend in app.Friends)
+                    {
+                        User frUser = _client.Users.Get(new long[] {friend}, ProfileFields.FirstName | ProfileFields.LastName).First();
+                        listBox_Apps.Items.Add($"Friend: {frUser.FirstName} {frUser.LastName}");
+                    }
+                }
+            } catch (Exception exception) {Console.WriteLine(exception.Message);}
+        }
+
+        private void LoadCurrentApps()
+        {
+            if (!_client.IsAuthorized) return;
+            try
+            {
+                var apps = _client.Apps.Get(new AppGetParams
+                {
+                    AppIds = AppsId,
+                    ReturnFriends = false
+                });
+                listBox_AppsId.Text = "";
+                listBox_AppsTitle.Text = "";
+                foreach (var app in apps.Apps)
+                {
+                    listBox_AppsTitle.Items.Add($"App:{app.Title}");
+                    listBox_AppsId.Items.Add($"Id:{app.Id}");
+                }
+            } catch (Exception exception) {Console.WriteLine(exception.Message);}
+        }
+
+        private void textBox_NewApp_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    AppsId.Add(Convert.ToUInt64(textBox_NewApp.Text));
+                    var apps = _client.Apps.Get(new AppGetParams
+                    {
+                        AppIds = new ulong[] {Convert.ToUInt64(textBox_NewApp.Text)},
+                    });
+                    if (apps.Apps.First() is null) throw new Exception();
+                    textBox_NewApp.Text = "";
+                    Thread gettingCurrentApps = new Thread(LoadCurrentApps);
+                    gettingCurrentApps.IsBackground = true;
+                    gettingCurrentApps.Name = "Getting apps";
+                    gettingCurrentApps.Start();
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("Incorrect ID. Repeat please.");
+                }
+            }
         }
     }
 }

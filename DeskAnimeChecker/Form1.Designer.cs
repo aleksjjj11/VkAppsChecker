@@ -29,6 +29,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources =
+                new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.button1 = new System.Windows.Forms.Button();
             this.listBox_Apps = new System.Windows.Forms.ListBox();
             this.button_GetApps = new System.Windows.Forms.Button();
@@ -38,11 +40,15 @@
             this.label_Password = new System.Windows.Forms.Label();
             this.button_Auth = new System.Windows.Forms.Button();
             this.label_Error = new System.Windows.Forms.Label();
+            this.textBox_NewApp = new System.Windows.Forms.TextBox();
+            this.listBox_AppsTitle = new System.Windows.Forms.ListBox();
+            this.listBox_AppsId = new System.Windows.Forms.ListBox();
+            this.label_NewApp = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(11, 231);
+            this.button1.Location = new System.Drawing.Point(10, 231);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(89, 29);
             this.button1.TabIndex = 4;
@@ -72,7 +78,7 @@
             // textBox_Login
             // 
             this.textBox_Login.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.textBox_Login.Location = new System.Drawing.Point(11, 41);
+            this.textBox_Login.Location = new System.Drawing.Point(12, 42);
             this.textBox_Login.Name = "textBox_Login";
             this.textBox_Login.Size = new System.Drawing.Size(203, 25);
             this.textBox_Login.TabIndex = 7;
@@ -80,7 +86,7 @@
             // textBox_Password
             // 
             this.textBox_Password.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.textBox_Password.Location = new System.Drawing.Point(11, 105);
+            this.textBox_Password.Location = new System.Drawing.Point(12, 105);
             this.textBox_Password.Name = "textBox_Password";
             this.textBox_Password.Size = new System.Drawing.Size(203, 25);
             this.textBox_Password.TabIndex = 8;
@@ -121,12 +127,52 @@
             this.label_Error.TabIndex = 12;
             this.label_Error.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // textBox_NewApp
+            // 
+            this.textBox_NewApp.Location = new System.Drawing.Point(58, 287);
+            this.textBox_NewApp.Name = "textBox_NewApp";
+            this.textBox_NewApp.Size = new System.Drawing.Size(103, 23);
+            this.textBox_NewApp.TabIndex = 13;
+            this.textBox_NewApp.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_NewApp_KeyDown);
+            // 
+            // listBox_AppsTitle
+            // 
+            this.listBox_AppsTitle.FormattingEnabled = true;
+            this.listBox_AppsTitle.HorizontalScrollbar = true;
+            this.listBox_AppsTitle.ItemHeight = 15;
+            this.listBox_AppsTitle.Location = new System.Drawing.Point(10, 313);
+            this.listBox_AppsTitle.Name = "listBox_AppsTitle";
+            this.listBox_AppsTitle.Size = new System.Drawing.Size(103, 124);
+            this.listBox_AppsTitle.TabIndex = 14;
+            // 
+            // listBox_AppsId
+            // 
+            this.listBox_AppsId.FormattingEnabled = true;
+            this.listBox_AppsId.ItemHeight = 15;
+            this.listBox_AppsId.Location = new System.Drawing.Point(121, 313);
+            this.listBox_AppsId.Name = "listBox_AppsId";
+            this.listBox_AppsId.Size = new System.Drawing.Size(103, 124);
+            this.listBox_AppsId.TabIndex = 15;
+            // 
+            // label_NewApp
+            // 
+            this.label_NewApp.Location = new System.Drawing.Point(58, 269);
+            this.label_NewApp.Name = "label_NewApp";
+            this.label_NewApp.Size = new System.Drawing.Size(103, 15);
+            this.label_NewApp.TabIndex = 16;
+            this.label_NewApp.Text = "Id of new app";
+            this.label_NewApp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(512, 464);
+            this.Controls.Add(this.label_NewApp);
+            this.Controls.Add(this.listBox_AppsId);
+            this.Controls.Add(this.listBox_AppsTitle);
+            this.Controls.Add(this.textBox_NewApp);
             this.Controls.Add(this.label_Error);
             this.Controls.Add(this.button_Auth);
             this.Controls.Add(this.label_Password);
@@ -137,9 +183,10 @@
             this.Controls.Add(this.listBox_Apps);
             this.Controls.Add(this.button1);
             this.ForeColor = System.Drawing.Color.Black;
+            this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "Apps Checker";
             this.ResumeLayout(false);
             this.PerformLayout();
         }
@@ -155,5 +202,9 @@
         private System.Windows.Forms.TextBox textBox_Password;
         private System.Windows.Forms.TextBox textBox_Login;
         private System.Windows.Forms.Label label_Error;
+        private System.Windows.Forms.Label label_NewApp;
+        private System.Windows.Forms.ListBox listBox_AppsId;
+        private System.Windows.Forms.ListBox listBox_AppsTitle;
+        private System.Windows.Forms.TextBox textBox_NewApp;
     }
 }
