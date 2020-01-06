@@ -125,3 +125,6 @@ C:\Users\user\Desktop\Programming\DeskAnimeChecker\DeskAnimeChecker\bin\Debug\pr
 C:\Users\user\Desktop\Programming\DeskAnimeChecker\DeskAnimeChecker\bin\Debug\VkNet.xml
 C:\Users\user\Desktop\Programming\DeskAnimeChecker\DeskAnimeChecker\obj\Debug\DeskAnimeChecker.exe.config
 C:\Users\user\Desktop\Programming\DeskAnimeChecker\DeskAnimeChecker\obj\Debug\DeskAnimeChecker.Form1.resources
+C:\Users\user\Desktop\Programming\DeskAnimeChecker\DeskAnimeChecker\bin\Debug\System.Data.SQLite.dll
+C:\Users\user\Desktop\Programming\DeskAnimeChecker\DeskAnimeChecker\bin\Debug\System.Data.SQLite.xml
+C:\Users\user\Desktop\Programming\DeskAnimeChecker\DeskAnimeChecker\bin\Debug\System.Data.SQLite.dll.config

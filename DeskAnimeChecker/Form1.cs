@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.SQLite;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.ServiceModel.Configuration;
 using System.Threading;
@@ -12,6 +16,7 @@ using VkNet.Enums.Filters;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 using Application = System.Windows.Forms.Application;
+using Message = VkNet.Model.Message;
 
 namespace DeskAnimeChecker
 {
@@ -19,6 +24,10 @@ namespace DeskAnimeChecker
     {
         private VkApi _client;
         private List<ulong> AppsId = new List<ulong>{6978390, 5099068, 2427019, 5492280, 6908748};
+        private string baseApps = "allApps.txt";
+        private ulong _idApp = 1;
+        private StreamWriter fileStream;
+
         public Form1()
         {
             InitializeComponent();
@@ -29,6 +38,7 @@ namespace DeskAnimeChecker
 
         private void button1_Click(object sender, EventArgs e)
         {
+            fileStream?.Close();
             Application.Exit();
         }
 
@@ -164,34 +174,64 @@ namespace DeskAnimeChecker
 
         private void Pasring()
         {
-            listBox_AppsId.Text = "";
-            listBox_AppsTitle.Text = "";
-            for (ulong i = 1; i < 10000000; i++)
+            //listBox_AppsId.Text = "";
+            //listBox_AppsTitle.Text = "";
+            while (_idApp < 10000000)
             {
+                textBox_NewApp.Text = _idApp.ToString();
+                /*for (ulong i = 1; i < 10000000; i++)
+                {
+                    try
+                    {
+                        var apps = _client.Apps.Get(new AppGetParams
+                        {
+                            AppIds = new ulong[] {i}
+                        });
+                        if (apps.Apps.First() is null) continue;
+
+                        listBox_AppsTitle.Items.Add($"App:{apps.Apps.First()?.Title}");
+                        listBox_AppsId.Items.Add($"Id:{apps.Apps.First()?.Id}");
+                    }
+                    catch (Exception exception)
+                    {
+                        listBox_AppsTitle.Items.Add("Error");
+                        listBox_AppsId.Items.Add("Error");
+                    }
+                }*/
                 try
                 {
                     var apps = _client.Apps.Get(new AppGetParams
                     {
-                        AppIds = new ulong[] {i}
+                        AppIds = new ulong[] {_idApp}
                     });
                     if (apps.Apps.First() is null) continue;
-
                     listBox_AppsTitle.Items.Add($"App:{apps.Apps.First()?.Title}");
                     listBox_AppsId.Items.Add($"Id:{apps.Apps.First()?.Id}");
+                    fileStream.Write($"{apps.Apps.First()?.Id}\t{apps.Apps.First()?.Title}\n");
                 }
                 catch (Exception exception)
                 {
-                    listBox_AppsTitle.Items.Add("Error");
-                    listBox_AppsId.Items.Add("Error");
+                    //listBox_AppsTitle.Items.Add("Error");
+                    //listBox_AppsId.Items.Add("Error");
                 }
+                _idApp++;
             }
         }
             
         private void button2_Click(object sender, EventArgs e)
         {
-            Thread thread = new Thread(Pasring);
-            thread.IsBackground = true;
-            thread.Start();
+            if (!_client.IsAuthorized) return;
+            fileStream = new StreamWriter(baseApps);
+            fileStream.Write("ID\tTitle\n");
+            //for (int i = 0; i < 25; i++)
+            //{
+                new Thread(Pasring)
+                {
+                    IsBackground = true
+                }.Start();
+            //}
+            /*Thread thread = 
+            thread.IsBackground = true;*/
         }
     }
 }
