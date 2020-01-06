@@ -146,7 +146,7 @@ namespace DeskAnimeChecker
                     AppsId.Add(Convert.ToUInt64(textBox_NewApp.Text));
                     var apps = _client.Apps.Get(new AppGetParams
                     {
-                        AppIds = new ulong[] {Convert.ToUInt64(textBox_NewApp.Text)},
+                        AppIds = new ulong[] {Convert.ToUInt64(textBox_NewApp.Text)}
                     });
                     if (apps.Apps.First() is null) throw new Exception();
                     textBox_NewApp.Text = "";
@@ -160,6 +160,38 @@ namespace DeskAnimeChecker
                     MessageBox.Show("Incorrect ID. Repeat please.");
                 }
             }
+        }
+
+        private void Pasring()
+        {
+            listBox_AppsId.Text = "";
+            listBox_AppsTitle.Text = "";
+            for (ulong i = 1; i < 10000000; i++)
+            {
+                try
+                {
+                    var apps = _client.Apps.Get(new AppGetParams
+                    {
+                        AppIds = new ulong[] {i}
+                    });
+                    if (apps.Apps.First() is null) continue;
+
+                    listBox_AppsTitle.Items.Add($"App:{apps.Apps.First()?.Title}");
+                    listBox_AppsId.Items.Add($"Id:{apps.Apps.First()?.Id}");
+                }
+                catch (Exception exception)
+                {
+                    listBox_AppsTitle.Items.Add("Error");
+                    listBox_AppsId.Items.Add("Error");
+                }
+            }
+        }
+            
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Thread thread = new Thread(Pasring);
+            thread.IsBackground = true;
+            thread.Start();
         }
     }
 }

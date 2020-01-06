@@ -44,6 +44,7 @@
             this.listBox_AppsTitle = new System.Windows.Forms.ListBox();
             this.listBox_AppsId = new System.Windows.Forms.ListBox();
             this.label_NewApp = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -163,12 +164,23 @@
             this.label_NewApp.Text = "Id of new app";
             this.label_NewApp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(178, 277);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(36, 32);
+            this.button2.TabIndex = 17;
+            this.button2.Text = "Pars";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(512, 464);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.label_NewApp);
             this.Controls.Add(this.listBox_AppsId);
             this.Controls.Add(this.listBox_AppsTitle);
@@ -206,5 +218,6 @@
         private System.Windows.Forms.ListBox listBox_AppsId;
         private System.Windows.Forms.ListBox listBox_AppsTitle;
         private System.Windows.Forms.TextBox textBox_NewApp;
+        private System.Windows.Forms.Button button2;
     }
 }
