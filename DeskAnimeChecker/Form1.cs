@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -25,7 +25,7 @@ namespace DeskAnimeChecker
         private VkApi _client;
         private List<ulong> AppsId = new List<ulong>{6978390, 5099068, 2427019, 5492280, 6908748};
         private string baseApps = "allApps.txt";
-        private ulong _idApp = 7266542;
+        private ulong _idApp = 7251541;
         private StreamWriter fileStream;
 
         public Form1()
@@ -172,18 +172,18 @@ namespace DeskAnimeChecker
             }
         }
 
-        private void Pasring()
+        private void Pasring(VkApi _client)
         {
             //listBox_AppsId.Text = "";
             //listBox_AppsTitle.Text = "";
-            while (_idApp > 84000)
+            while (_idApp > 85000)
             {
                 textBox_NewApp.Text = _idApp.ToString();
                 try
                 {
                     var apps = _client.Apps.Get(new AppGetParams
                     {
-                        AppIds = new ulong[] {_idApp}
+                        AppIds = new ulong[] {_idApp--}
                     });
                     if (apps.Apps.First() is null) continue;
                     listBox_AppsTitle.Items.Add($"App:{apps.Apps.First()?.Title}");
@@ -194,7 +194,7 @@ namespace DeskAnimeChecker
                 {
                     
                 }
-                _idApp--;
+                
             }
         }
             
@@ -203,11 +203,34 @@ namespace DeskAnimeChecker
             if (!_client.IsAuthorized) return;
             fileStream = new StreamWriter(baseApps);
             fileStream.Write("ID\tTitle\n");
-            for (int i = 0; i < 50; i++)
+            int auth = 0;
+            for (int i = 0; i < 75; i++)
             {
-                Thread.Sleep(50);
-                new Thread(Pasring).Start();
-                _idApp--;
+                VkApi client;
+                client = new VkApi();
+            try
+            {
+                client.Authorize(new ApiAuthParams
+                {
+                    ApplicationId = 7267974,
+                    Login = textBox_Login.Text,
+                    Password = textBox_Password.Text,
+                    Settings = Settings.All
+                });
+                label_Error.ForeColor = Color.Lime;
+                auth++;
+                label_Error.Text = (auth.ToString() + " клиентов запущено успешно");
+            }
+            catch (Exception exception)
+            {
+                if (!client.IsAuthorized)
+                {
+                    label_Error.ForeColor = Color.Red;
+                    label_Error.Text = "Что-то не так";
+                }
+            }
+            
+            (new Thread(() => Pasring(client))).Start();
             }
         }
     }
