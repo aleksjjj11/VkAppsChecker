@@ -25,7 +25,7 @@ namespace DeskAnimeChecker
         private VkApi _client;
         private List<ulong> AppsId = new List<ulong>{6978390, 5099068, 2427019, 5492280, 6908748};
         private string baseApps = "allApps.txt";
-        private ulong _idApp = 1;
+        private ulong _idApp = 7266542;
         private StreamWriter fileStream;
 
         public Form1()
@@ -176,28 +176,9 @@ namespace DeskAnimeChecker
         {
             //listBox_AppsId.Text = "";
             //listBox_AppsTitle.Text = "";
-            while (_idApp < 10000000)
+            while (_idApp > 84000)
             {
                 textBox_NewApp.Text = _idApp.ToString();
-                /*for (ulong i = 1; i < 10000000; i++)
-                {
-                    try
-                    {
-                        var apps = _client.Apps.Get(new AppGetParams
-                        {
-                            AppIds = new ulong[] {i}
-                        });
-                        if (apps.Apps.First() is null) continue;
-
-                        listBox_AppsTitle.Items.Add($"App:{apps.Apps.First()?.Title}");
-                        listBox_AppsId.Items.Add($"Id:{apps.Apps.First()?.Id}");
-                    }
-                    catch (Exception exception)
-                    {
-                        listBox_AppsTitle.Items.Add("Error");
-                        listBox_AppsId.Items.Add("Error");
-                    }
-                }*/
                 try
                 {
                     var apps = _client.Apps.Get(new AppGetParams
@@ -211,10 +192,9 @@ namespace DeskAnimeChecker
                 }
                 catch (Exception exception)
                 {
-                    //listBox_AppsTitle.Items.Add("Error");
-                    //listBox_AppsId.Items.Add("Error");
+                    
                 }
-                _idApp++;
+                _idApp--;
             }
         }
             
@@ -223,15 +203,12 @@ namespace DeskAnimeChecker
             if (!_client.IsAuthorized) return;
             fileStream = new StreamWriter(baseApps);
             fileStream.Write("ID\tTitle\n");
-            //for (int i = 0; i < 25; i++)
-            //{
-                new Thread(Pasring)
-                {
-                    IsBackground = true
-                }.Start();
-            //}
-            /*Thread thread = 
-            thread.IsBackground = true;*/
+            for (int i = 0; i < 50; i++)
+            {
+                Thread.Sleep(50);
+                new Thread(Pasring).Start();
+                _idApp--;
+            }
         }
     }
 }
